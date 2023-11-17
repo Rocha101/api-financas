@@ -35,7 +35,7 @@ model Budget {
 model Transaction {
   id          Int      @id @default(autoincrement())
   type        String // "expense" or "income" or other types
-  amount      Int
+  amount      Float
   description String?
   user        User     @relation(fields: [userId], references: [id])
   userId      Int

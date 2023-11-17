@@ -14,6 +14,11 @@ router.get(
   AuthController.verifyToken,
   TransactionController.getTransactionById
 );
+router.get(
+  "/total/:type",
+  AuthController.verifyToken,
+  TransactionController.getTransactionsTotalByType
+);
 router.post(
   "/",
   AuthController.verifyToken,

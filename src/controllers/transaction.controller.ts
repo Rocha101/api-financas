@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Transaction } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -15,6 +15,23 @@ const createTransaction = async (req: Request, res: Response) => {
       },
     });
     res.status(200).json(newTransaction);
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+};
+
+const getTransactionsTotalByType = async (req: Request, res: Response) => {
+  try {
+    const { type } = req.params;
+    const total = await prisma.transaction.aggregate({
+      _sum: {
+        amount: true,
+      },
+      where: {
+        type,
+      },
+    });
+    res.status(200).json(total);
   } catch (e) {
     res.status(500).json({ error: e });
   }
@@ -89,4 +106,5 @@ export default {
   getTransactionById,
   updateTransaction,
   deleteTransaction,
+  getTransactionsTotalByType,
 };
