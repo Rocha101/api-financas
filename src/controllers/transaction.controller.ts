@@ -28,7 +28,7 @@ const getTransactionsTotalByType = async (req: Request, res: Response) => {
         amount: true,
       },
       where: {
-        type,
+        type: type as Transaction["type"],
       },
     });
     res.status(200).json(total);

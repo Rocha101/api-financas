@@ -5,13 +5,14 @@ const prisma = new PrismaClient();
 
 const createGoal = async (req: Request, res: Response) => {
   try {
-    const { name, targetAmount, progress, userId } = req.body;
+    const { name, targetAmount, progress, userId, deadline } = req.body;
     const newGoal = await prisma.goal.create({
       data: {
         name,
         targetAmount,
         progress,
-        userId, // Ensure userId exists and relates to an existing user
+        userId,
+        deadline,
       },
     });
     res.status(200).json(newGoal);

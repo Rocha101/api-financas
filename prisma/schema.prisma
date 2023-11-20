@@ -12,18 +12,18 @@ model User {
   id           Int           @id @default(autoincrement())
   email        String        @unique
   username     String?
-  password     String
-  charts       Chart[]
+  password     String // Hashed and salted password
   budgets      Budget[]
   transactions Transaction[]
   goals        Goal[]
-  reminders    Reminder[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }
 
 model Budget {
   id        Int      @id @default(autoincrement())
   category  String
-  limit     Int
+  limit     Float // Use float or decimal for precise financial amounts
   user      User     @relation(fields: [userId], references: [id])
   userId    Int
   createdAt DateTime @default(now())
@@ -34,7 +34,7 @@ model Budget {
 
 model Transaction {
   id          Int      @id @default(autoincrement())
-  type        String // "expense" or "income" or other types
+  type        String
   amount      Float
   description String?
   user        User     @relation(fields: [userId], references: [id])
@@ -48,39 +48,13 @@ model Transaction {
 model Goal {
   id           Int      @id @default(autoincrement())
   name         String
-  targetAmount Int
-  progress     Int
+  targetAmount Float
+  progress     Float // Progress as a percentage or actual amount achieved
+  deadline     DateTime // Add a deadline for the goal
   user         User     @relation(fields: [userId], references: [id])
   userId       Int
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-
-  @@index([userId])
-}
-
-model Reminder {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String?
-  date        DateTime
-  user        User     @relation(fields: [userId], references: [id])
-  userId      Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@index([userId])
-}
-
-model Chart {
-  id        Int      @id @default(autoincrement())
-  name      String
-  type      String
-  data      String
-  key       String
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
   @@index([userId])
 }

@@ -4,10 +4,6 @@ import express from "express";
 
 const router = express.Router();
 
-router.get(
-  "/",
-  authController.verifyToken,
-  reportController.generateSalesReport
-);
+router.get("/", authController.verifyToken, reportController.generateReport);
 
 export default router;

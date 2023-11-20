@@ -10,7 +10,7 @@ const createBudget = async (req: Request, res: Response) => {
       data: {
         category,
         limit,
-        userId, // Ensure userId exists and relates to an existing user
+        userId,
       },
     });
     res.status(200).json(newBudget);
