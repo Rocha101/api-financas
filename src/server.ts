@@ -6,7 +6,6 @@ import reportRoute from "./routes/report.route";
 import transactionRoute from "./routes/transaction.route";
 import budgetRoute from "./routes/budget.route";
 import goalRoute from "./routes/goal.route";
-import reminderRoute from "./routes/reminder.route";
 
 export const prisma = new PrismaClient();
 
@@ -25,7 +24,6 @@ async function main() {
   app.use("/transaction", transactionRoute);
   app.use("/budget", budgetRoute);
   app.use("/goal", goalRoute);
-  app.use("/reminder", reminderRoute);
 
   // Catch unregistered routes
   app.all("*", (req: Request, res: Response) => {
