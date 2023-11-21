@@ -53,7 +53,7 @@ const getGoalById = async (req: Request, res: Response) => {
 
 const updateGoal = async (req: Request, res: Response) => {
   try {
-    const { id, name, targetAmount, progress } = req.body;
+    const { id, name, targetAmount, progress, deadline } = req.body;
     const updatedGoal = await prisma.goal.update({
       where: {
         id: Number(id),
@@ -62,6 +62,7 @@ const updateGoal = async (req: Request, res: Response) => {
         name,
         targetAmount,
         progress,
+        deadline,
       },
     });
     res.status(200).json(updatedGoal);
