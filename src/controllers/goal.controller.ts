@@ -12,7 +12,6 @@ const createGoal = async (req: Request, res: Response) => {
         targetAmount,
         progress,
         userId,
-        deadline: new Date(deadline),
       },
     });
     res.status(200).json(newGoal);
@@ -62,7 +61,6 @@ const updateGoal = async (req: Request, res: Response) => {
         name,
         targetAmount,
         progress,
-        deadline: new Date(deadline),
       },
     });
     res.status(200).json(updatedGoal);
