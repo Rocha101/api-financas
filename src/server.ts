@@ -17,7 +17,6 @@ async function main() {
   app.use(cors());
   app.use(express.json());
 
-  // Register API routes
   app.use("/user", userRoute);
   app.use("/auth", authRoute);
   app.use("/report", reportRoute);
@@ -25,7 +24,6 @@ async function main() {
   app.use("/budget", budgetRoute);
   app.use("/goal", goalRoute);
 
-  // Catch unregistered routes
   app.all("*", (req: Request, res: Response) => {
     res.status(404).json({ error: `Route ${req.originalUrl} not found` });
   });

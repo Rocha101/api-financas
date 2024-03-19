@@ -15,9 +15,14 @@ router.get(
   TransactionController.getTransactionById
 );
 router.get(
-  "/total/:type",
+  "/total/:type/:startDate/:endDate",
   AuthController.verifyToken,
   TransactionController.getTransactionsTotalByType
+);
+router.get(
+  "/totalbymonth/:startDate/:endDate",
+  AuthController.verifyToken,
+  TransactionController.getTransactionsByMonth
 );
 router.post(
   "/",

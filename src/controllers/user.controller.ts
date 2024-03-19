@@ -23,8 +23,6 @@ const getUsers = async (req: Request, res: Response) => {
   try {
     const allUsers = await prisma.user.findMany({
       include: {
-        reminders: true,
-        charts: true,
         budgets: true,
         transactions: true,
         goals: true,
@@ -44,8 +42,6 @@ const getUserById = async (req: Request, res: Response) => {
         id: Number(id),
       },
       include: {
-        reminders: true,
-        charts: true,
         budgets: true,
         transactions: true,
         goals: true,
