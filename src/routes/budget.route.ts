@@ -4,7 +4,7 @@ import AuthController from "../controllers/auth.controller";
 
 const router = express.Router();
 
-router.get("/", AuthController.verifyToken, BudgetController.getBudgets);
+router.get("/:userId", AuthController.verifyToken, BudgetController.getBudgets);
 router.get("/:id", AuthController.verifyToken, BudgetController.getBudgetById);
 router.post("/", AuthController.verifyToken, BudgetController.createBudget);
 router.delete(

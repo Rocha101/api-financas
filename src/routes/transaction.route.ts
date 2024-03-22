@@ -5,7 +5,7 @@ import AuthController from "../controllers/auth.controller";
 const router = express.Router();
 
 router.get(
-  "/",
+  "/:userId",
   AuthController.verifyToken,
   TransactionController.getTransactions
 );
@@ -15,12 +15,12 @@ router.get(
   TransactionController.getTransactionById
 );
 router.get(
-  "/total/:type/:startDate/:endDate",
+  "/total/:userId",
   AuthController.verifyToken,
   TransactionController.getTransactionsTotalByType
 );
 router.get(
-  "/totalbymonth/:startDate/:endDate",
+  "/totalbymonth/:userId",
   AuthController.verifyToken,
   TransactionController.getTransactionsByMonth
 );

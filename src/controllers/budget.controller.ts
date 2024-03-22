@@ -1,16 +1,22 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import { Budget, Category, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 const createBudget = async (req: Request, res: Response) => {
   try {
-    const { category, limit, userId } = req.body;
+    const { limit, userId, name, categories } = req.body;
+    console.log(req.body);
     const newBudget = await prisma.budget.create({
       data: {
-        category,
+        name,
         limit,
-        userId,
+        categories: {
+          create: categories.map((category: Category) => ({
+            name: category,
+          })),
+        },
+        userId: Number(userId),
       },
     });
     res.status(200).json(newBudget);
@@ -20,10 +26,16 @@ const createBudget = async (req: Request, res: Response) => {
 };
 
 const getBudgets = async (req: Request, res: Response) => {
+  const { userId } = req.params;
   try {
     const budgets = await prisma.budget.findMany({
+      where: {
+        userId: Number(userId),
+      },
       include: {
         user: true,
+        categories: true,
+        transactions: true,
       },
     });
     res.status(200).json(budgets);
@@ -41,6 +53,8 @@ const getBudgetById = async (req: Request, res: Response) => {
       },
       include: {
         user: true,
+        categories: true,
+        transactions: true,
       },
     });
     res.status(200).json(budget);
@@ -51,14 +65,21 @@ const getBudgetById = async (req: Request, res: Response) => {
 
 const updateBudget = async (req: Request, res: Response) => {
   try {
-    const { id, category, limit } = req.body;
+    const { id } = req.params;
+    const { categories, limit, name } = req.body;
     const updatedBudget = await prisma.budget.update({
       where: {
         id: Number(id),
       },
       data: {
-        category,
+        name,
         limit,
+        categories: {
+          connectOrCreate: categories.map((category: Category) => ({
+            where: { name: category },
+            create: { name: category },
+          })),
+        },
       },
     });
     res.status(200).json(updatedBudget);

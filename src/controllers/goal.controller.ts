@@ -1,17 +1,22 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import { Category, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 const createGoal = async (req: Request, res: Response) => {
   try {
-    const { name, targetAmount, progress, userId, deadline } = req.body;
+    const { name, targetAmount, progress, userId, categories } = req.body;
     const newGoal = await prisma.goal.create({
       data: {
         name,
         targetAmount,
         progress,
-        userId,
+        categories: {
+          create: categories.map((category: Category) => ({
+            name: category,
+          })),
+        },
+        userId: Number(userId),
       },
     });
     res.status(200).json(newGoal);
@@ -22,9 +27,15 @@ const createGoal = async (req: Request, res: Response) => {
 
 const getGoals = async (req: Request, res: Response) => {
   try {
+    const { userId } = req.params;
     const goals = await prisma.goal.findMany({
+      where: {
+        userId: Number(userId),
+      },
       include: {
         user: true,
+        transactions: true,
+        categories: true,
       },
     });
     res.status(200).json(goals);
@@ -42,6 +53,8 @@ const getGoalById = async (req: Request, res: Response) => {
       },
       include: {
         user: true,
+        transactions: true,
+        categories: true,
       },
     });
     res.status(200).json(goal);
@@ -52,7 +65,8 @@ const getGoalById = async (req: Request, res: Response) => {
 
 const updateGoal = async (req: Request, res: Response) => {
   try {
-    const { id, name, targetAmount, progress, deadline } = req.body;
+    const { id } = req.params;
+    const { name, targetAmount, progress, categories } = req.body;
     const updatedGoal = await prisma.goal.update({
       where: {
         id: Number(id),
@@ -61,6 +75,11 @@ const updateGoal = async (req: Request, res: Response) => {
         name,
         targetAmount,
         progress,
+        categories: {
+          create: categories.map((category: Category) => ({
+            name: category,
+          })),
+        },
       },
     });
     res.status(200).json(updatedGoal);
