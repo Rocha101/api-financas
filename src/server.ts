@@ -6,6 +6,7 @@ import reportRoute from "./routes/report.route";
 import transactionRoute from "./routes/transaction.route";
 import budgetRoute from "./routes/budget.route";
 import goalRoute from "./routes/goal.route";
+import categoriesRoute from "./routes/categories.route";
 
 export const prisma = new PrismaClient();
 
@@ -23,6 +24,7 @@ async function main() {
   app.use("/transaction", transactionRoute);
   app.use("/budget", budgetRoute);
   app.use("/goal", goalRoute);
+  app.use("/categories", categoriesRoute);
 
   app.all("*", (req: Request, res: Response) => {
     res.status(404).json({ error: `Route ${req.originalUrl} not found` });

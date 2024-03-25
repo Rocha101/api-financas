@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Prisma, PrismaClient, Transaction } from "@prisma/client";
+import { start } from "repl";
 
 const prisma = new PrismaClient();
 
@@ -156,6 +157,8 @@ const getTransactionsTotalByType = async (req: Request, res: Response) => {
 const getTransactions = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
+    const { type, startDate, endDate } = req.query;
+
     const transactions = await prisma.transaction.findMany({
       include: {
         user: true,
@@ -164,6 +167,16 @@ const getTransactions = async (req: Request, res: Response) => {
       },
       where: {
         userId: Number(userId),
+        ...(startDate &&
+          endDate && {
+            createdAt: {
+              gte: new Date(startDate as string),
+              lte: new Date(endDate as string),
+            },
+          }),
+        ...(type && {
+          type: type as Transaction["type"],
+        }),
       },
     });
     res.status(200).json(transactions);
